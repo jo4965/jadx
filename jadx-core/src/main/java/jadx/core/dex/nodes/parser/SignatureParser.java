@@ -312,7 +312,10 @@ public class SignatureParser {
 		}
 		List<ArgType> args = new LinkedList<>();
 		do {
-			args.add(consumeType());
+			argType = consumeType();
+			if(argType == null)
+				break;
+			args.add(argType);
 		} while (!lookAhead(')'));
 		consume(')');
 		return args;
