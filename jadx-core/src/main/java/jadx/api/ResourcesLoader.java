@@ -96,7 +96,7 @@ public final class ResourcesLoader {
 			case MANIFEST:
 			case XML:
 				ICodeInfo content = jadxRef.getXmlParser().parse(inputStream);
-				return ResContainer.textResource(rf.getOriginalName(), content);
+				return ResContainer.textResource(rf.getDeobfName(), content);
 
 			case ARSC:
 				return new ResTableParser(jadxRef.getRoot()).decodeFiles(inputStream);
@@ -128,9 +128,7 @@ public final class ResourcesLoader {
 			return;
 		}
 		if (FileUtils.isZipFile(file)) {
-			ZipSecurity.visitZipEntries(file, (zipFile, entry) -> {
-				addEntry(list, file, entry);
-			});
+			ZipSecurity.visitZipEntries(file, (zipFile, entry) -> addEntry(list, file, entry));
 		} else {
 			addResourceFile(list, file);
 		}
@@ -158,7 +156,6 @@ public final class ResourcesLoader {
 		}
 	}
 
-	@SuppressWarnings("CharsetObjectCanBeUsed")
 	public static ICodeInfo loadToCodeWriter(InputStream is) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(READ_BUFFER_SIZE);
 		copyStream(is, baos);
